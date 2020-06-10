@@ -21,7 +21,7 @@ class First(Resource):
             return {'short_url': random_generator()}
         return {'error': 'it is not url'}
 
-
+#just for makinf diffrence
 api.add_resource(First, '/<string:url>')
 
 if __name__ == '__main__':
