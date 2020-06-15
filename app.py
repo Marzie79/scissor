@@ -5,9 +5,12 @@ from flask import request
 import string
 import random
 
+from urlvalidator import ValidationError, URLValidator
+
 app = Flask(__name__)
 
 api = Api(app)
+validate = URLValidator()
 
 
 def random_generator(size=5, chars=string.ascii_letters):
@@ -16,11 +19,11 @@ def random_generator(size=5, chars=string.ascii_letters):
 
 class First(Resource):
     def post(self):
-        # I give a param with key url for sending data
-        url = request.args.get('url')
-        if url[0:7] == 'http://' or url[0:8] == 'https://':
+        try:
+            validate(request.args.get('url'))
             return {'short_url': random_generator()}
-        return {'error': 'it is not url'}
+        except ValidationError as exception:
+            return {'error': 'it is not url'}
 
 
 api.add_resource(First, '/')
