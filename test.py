@@ -1,13 +1,16 @@
 import json
+import flask
 import unittest
+
+import requests
+
 from app import app
 
 app.testing = True
 
 
 class TestFlaskApiUsingRequests(unittest.TestCase):
-
-    def True_test1(self):
+    def test_add(self):
         response = app.test_client().post(
             '/?url=http://adshjkl.ki'
         )
