@@ -1,25 +1,42 @@
 import json
-import flask
 import unittest
-
-import requests
-
 from app import app
 
 app.testing = True
 
 
 class TestFlaskApiUsingRequests(unittest.TestCase):
-    def test_add(self):
+    def test_url_first(self):
         response = app.test_client().post(
-            '/?url=http://adshjkl.ki'
+            '/?url=http://adshjkl.ir'
         )
         data = response.get_data('url')
         res = json.loads(data)
-        if 'short_url' in res:
-            self.assertEqual(res['short_url'], res['short_url'])
-        else:
-            self.assertEqual('wrong test', res['short_url'])
+        self.assertIn('short_url', res)
+
+    def test_url_second(self):
+        response = app.test_client().post(
+            '/?url=http://'
+        )
+        data = response.get_data('url')
+        res = json.loads(data)
+        self.assertIn('error', res)
+
+    def test_url_third(self):
+        response = app.test_client().post(
+            '/?url=http://k.com'
+        )
+        data = response.get_data('url')
+        res = json.loads(data)
+        self.assertIn('short_url', res)
+
+    def test_url_forth(self):
+        response = app.test_client().post(
+            '/?url=http://.com'
+        )
+        data = response.get_data('url')
+        res = json.loads(data)
+        self.assertIn('error', res)
 
 
 if __name__ == "__main__":
