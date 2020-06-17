@@ -1,12 +1,13 @@
 import json
 import unittest
 from app import app
+from flask import url_for
 
 app.testing = True
 
 
 class TestFlaskApiUsingRequests(unittest.TestCase):
-    def test_url_first(self):
+    def test_true_url(self):
         response = app.test_client().post(
             '/?url=http://adshjkl.ir'
         )
@@ -14,7 +15,7 @@ class TestFlaskApiUsingRequests(unittest.TestCase):
         res = json.loads(data)
         self.assertIn('short_url', res)
 
-    def test_url_second(self):
+    def test_none_url(self):
         response = app.test_client().post(
             '/?url=http://'
         )
@@ -22,7 +23,7 @@ class TestFlaskApiUsingRequests(unittest.TestCase):
         res = json.loads(data)
         self.assertIn('error', res)
 
-    def test_url_third(self):
+    def test_short_url(self):
         response = app.test_client().post(
             '/?url=http://k.com'
         )
@@ -30,7 +31,7 @@ class TestFlaskApiUsingRequests(unittest.TestCase):
         res = json.loads(data)
         self.assertIn('short_url', res)
 
-    def test_url_forth(self):
+    def test_noHost_url(self):
         response = app.test_client().post(
             '/?url=http://.com'
         )
