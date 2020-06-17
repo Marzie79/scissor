@@ -31,6 +31,14 @@ class First(Resource):
             return {'error': 'it is not url'}
 
 
+class Second(Resource):
+    def get(self, url):
+        if url in dict_url:
+            return redirect(dict_url[url], 302)
+        return {'error': 'an error has occurred'}
+
+
+api.add_resource(Second, '/<string:url>')
 api.add_resource(First, '/')
 
 if __name__ == '__main__':
