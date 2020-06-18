@@ -20,7 +20,7 @@ def random_generator(size=5, chars=string.ascii_letters):
 dict_url = {}
 
 
-class First(Resource):
+class Get_url(Resource):
     def post(self):
         try:
             validate(request.args.get('url'))
@@ -31,15 +31,15 @@ class First(Resource):
             return {'error': 'it is not url'}
 
 
-class Second(Resource):
+class Redirect(Resource):
     def get(self, url):
         if url in dict_url:
             return redirect(dict_url[url], 302)
         return {'error': 'an error has occurred'}
 
 
-api.add_resource(Second, '/<string:url>')
-api.add_resource(First, '/')
+api.add_resource(Redirect, '/<string:url>')
+api.add_resource(Get_url, '/')
 
 if __name__ == '__main__':
     app.run()
