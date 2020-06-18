@@ -2,18 +2,15 @@ from flask import Flask, redirect
 from flask_restful import Api, Resource
 from flask import request
 from model import db, Url
-
 import string
 import random
-
 from urlvalidator import ValidationError, URLValidator
 
 app = Flask(__name__)
-
 api = Api(app)
 validate = URLValidator()
-
 app.config['SECRET_KEY'] = 'mysecretkey'
+
 
 def random_generator(size=5, chars=string.ascii_letters):
     return ''.join(random.choice(chars) for x in range(size))
@@ -22,7 +19,7 @@ def random_generator(size=5, chars=string.ascii_letters):
 dict_url = {}
 
 
-class First(Resource):
+class Get_url(Resource):
     def post(self):
         try:
             long_url = request.args.get('url')
@@ -36,7 +33,7 @@ class First(Resource):
             return {'error': 'it is not url'}
 
 
-class Second(Resource):
+class Redirect(Resource):
     def get(self, url):
         exist_url = Url.query.filter_by(short_url=url)
         if exist_url is not None and exist_url.count() == 1:
@@ -44,8 +41,7 @@ class Second(Resource):
         return {'error': 'an error has occurred'}
 
 
-api.add_resource(Second, '/<string:url>')
-api.add_resource(First, '/')
-
+api.add_resource(Redirect, '/<string:url>')
+api.add_resource(Get_url, '/')
 if __name__ == '__main__':
     app.run(debug=True)
