@@ -211,6 +211,7 @@ fabric.properties
 ### VirtualEnv ###
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
+data.sqlite
 pyvenv.cfg
 .env
 .venv
