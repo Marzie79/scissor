@@ -233,6 +233,7 @@ pip-selfcheck.json
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
+migrations/
 
 # End of https://www.gitignore.io/api/django,pycharm,virtualenv,visualstudiocode
 
