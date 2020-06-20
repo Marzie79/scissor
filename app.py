@@ -6,7 +6,7 @@ from flask import request
 from model import db, Url
 import string
 import random
-from urlvalidator import URLValidator
+from urlvalidator import URLValidator, ValidationError
 
 app = Flask(__name__)
 api = Api(app)
@@ -36,8 +36,10 @@ class Get_url(Resource):
             db.session.add(url)
             db.session.commit()
             return {'short_url': short_url}
-        except Exception:
+        except ValidationError:
             return {'error': 'an error has occurred'}
+        except Exception:
+            return {'error': 'wrong format time error'}
 
 
 class Redirect(Resource):
