@@ -53,5 +53,7 @@ class Redirect(Resource):
 
 api.add_resource(Redirect, '/<string:url>')
 api.add_resource(Get_url, '/')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
