@@ -18,3 +18,4 @@ class Url(db.Model):
     id = db.Column(db.INTEGER, primary_key=True)
     long_url = db.Column(db.Text)
     short_url = db.Column(db.Text)
+    pub_date = db.Column(db.DateTime, nullable=True)
