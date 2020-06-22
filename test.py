@@ -1,6 +1,7 @@
 import json
 import unittest
 from app import app
+from model import Url
 
 app.testing = True
 
@@ -68,6 +69,22 @@ class TestFlaskApiUsingRequests(unittest.TestCase):
         data = response.get_data('url')
         res = json.loads(data)
         self.assertIn('error', res)
+
+    # at first the value of all url should be 0
+    def test_counter_in_first(self):
+        response = app.test_client().post('/?url=https://hello.com&time=2090-06-19 03:39')
+        data = response.get_data('url')
+        res = json.loads(data)
+        exist_url = Url.query.filter_by(short_url=res['short_url'])
+        self.assertIn('0', str(exist_url[0].counter))
+
+    # at first we get the counter of an existing object and we use it short url and check the counter again the counter should be changed
+    def test_counter_in_for_using_a_lot(self):
+        exist_url = Url.query.filter_by(short_url='TYUDX')
+        first = str(exist_url[0].counter + 1)
+        response = app.test_client().get('TYUDX')
+        second = str(exist_url[0].counter)
+        self.assertIn(first, second)
 
 
 if __name__ == "__main__":
