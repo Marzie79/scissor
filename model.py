@@ -17,5 +17,6 @@ class Url(db.Model):
     __tablename__ = 'my_url'
     id = db.Column(db.INTEGER, primary_key=True)
     long_url = db.Column(db.Text)
-    short_url = db.Column(db.Text)
+    short_url = db.Column(db.Text,unique=True)
+    counter = db.Column(db.INTEGER, default=0)
     pub_date = db.Column(db.DateTime, nullable=True)
