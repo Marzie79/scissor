@@ -6,8 +6,6 @@ from flask import request
 from model import db, Url
 import string
 import random
-import pandas as pd
-import numpy as np
 from urlvalidator import URLValidator, ValidationError
 
 app = Flask(__name__)
