@@ -76,7 +76,7 @@ class TestFlaskApiUsingRequests(unittest.TestCase):
         data = response.get_data('url')
         res = json.loads(data)
         exist_url = Url.query.filter_by(short_url=res['short_url'])
-        self.assertIn('0', str(exist_url[0].counter))
+        self.assertEqual('0', str(exist_url[0].counter))
 
     # at first we get the counter of an existing object and we use it short url and check the counter again the counter should be changed
     def test_counter_in_for_using_a_lot(self):
@@ -84,7 +84,31 @@ class TestFlaskApiUsingRequests(unittest.TestCase):
         first = str(exist_url[0].counter + 1)
         response = app.test_client().get('TYUDX')
         second = str(exist_url[0].counter)
-        self.assertIn(first, second)
+        self.assertEqual(first, second)
+
+    def test_aggregation_get_method(self):
+        response = app.test_client().get('/aggregation')
+        data = response.get_data('document')
+        res = json.loads(data)
+        self.assertIn('document', res)
+
+    def test_aggregation_correct_post(self):
+        response = app.test_client().post('/aggregation?url=VzJeW')
+        data = response.get_data('the counter of your url')
+        res = json.loads(data)
+        self.assertIn('the counter of your url', res)
+
+    def test_aggregation_wrong_post(self):
+        response = app.test_client().post('/aggregation?url=jqpd')
+        data = response.get_data('error')
+        res = json.loads(data)
+        self.assertIn('error', res)
+
+    def test_aggregation_empty_post(self):
+        response = app.test_client().post('/aggregation?url=')
+        data = response.get_data('error')
+        res = json.loads(data)
+        self.assertIn('error', res)
 
 
 if __name__ == "__main__":

@@ -63,9 +63,26 @@ class Redirect(Resource):
         return {'error': 'an error has occurred'}
 
 
+class Aggregation(Resource):
+    def get(self):
+        data_list = []
+        data = Url.query.order_by(Url.counter).all()
+        for item in data:
+            data_list.append({'Your_url': item.long_url, 'Our_url': item.short_url, 'counter': item.counter})
+        return {'document': data_list}
+
+    def post(self):
+        url = request.args.get('url')
+        exist_url = Url.query.filter_by(short_url=url)
+        if exist_url.count() == 1:
+            return {'the counter of your url': exist_url[0].counter}
+
+        return {'error': exist_url.count()}
+
+
 api.add_resource(Redirect, '/<string:url>')
+# Your view names need to be unique even if they are pointing to the same view method
 api.add_resource(Get_url, '/')
-
-
+api.add_resource(Aggregation, '/aggregation')
 if __name__ == '__main__':
     app.run(debug=True)
