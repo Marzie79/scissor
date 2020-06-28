@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from flask_caching import Cache
 from flask import Flask, redirect
 from flask_restful import Api, Resource
 from flask import request
@@ -9,11 +9,16 @@ import random
 from urlvalidator import URLValidator, ValidationError
 
 app = Flask(__name__)
+cache = Cache()
 api = Api(app)
 validate = URLValidator()
-app.config['SECRET_KEY'] = 'mysecretkey'
+cache.init_app(app, config={'CACHE_TYPE': 'simple'})
 
 
+# for meaning of cache is very good
+# http://www.mit.edu/~yandros/doc/cache_doc.html#:~:text=By%20default%2C%20pages%20protected%20with,allow%20them%20to%20be%20cached.
+# for using cache is useful
+# https://flask-caching.readthedocs.io/en/latest/
 def random_generator(size=5, chars=string.ascii_letters):
     return ''.join(random.choice(chars) for x in range(size))
 
@@ -64,12 +69,15 @@ class Redirect(Resource):
 
 
 class Aggregation(Resource):
+    @cache.cached(timeout=180, key_prefix='all_data')
     def get(self):
         data_list = []
         data = Url.query.order_by(Url.counter).all()
         for item in data:
             data_list.append({'Your_url': item.long_url, 'Our_url': item.short_url, 'counter': item.counter})
         return {'document': data_list}
+
+    cached_data = get('/aggregation')
 
     def post(self):
         url = request.args.get('url')
